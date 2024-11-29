@@ -1,6 +1,6 @@
 {
   "short_name": "React App",
-  "name": "Create React App Sample",
+  "name": "Quicksell - 21BCE9789",
   "icons": [
     {
       "src": "favicon.ico",
@@ -8,7 +8,7 @@
       "type": "image/x-icon"
     },
     {
-      "src": "logo192.png",
+      "src": "logo.png",
       "type": "image/png",
       "sizes": "192x192"
     },
@@ -16,23 +16,7 @@
       "src": "logo512.png",
       "type": "image/png",
       "sizes": "512x512"
-    },
-    {
-      "src":"Nagendra_Logo.png",
-      "sizes":"64x64 32x32 24x24 16x16",
-      "type":"image/png"
-    },
-    {
-      "src":"infi2.png",
-      "sizes":"64x64 32x32 24x24 16x16",
-      "type":"image/png"
-    },
-    {
-      "src":"1f642.svg",
-      "sizes":"64x64 32x32 24x24 16x16",
-      "type":"image/svg"
     }
-
   ],
   "start_url": ".",
   "display": "standalone",
