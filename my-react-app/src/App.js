@@ -1,131 +1,127 @@
-import React, { useState, useEffect } from "react";
-import "./App.css"; // Import custom CSS for styling
+import React, { useEffect, useState } from 'react';
+import './App.css';
+import Navbar from './Navbar/Navbar'
+import Board from './Board/Board';
+import { status, priorities } from './data';
 
-const API_URL = "https://www.test.com/api";
+// Example API URL
+const API_URL = "https://api.quicksell.co/v1/internal/frontend-assignment";
 
 function App() {
   const [tickets, setTickets] = useState([]);
-  const [grouping, setGrouping] = useState("status");
-  const [sorting, setSorting] = useState("priority");
+  const [users, setUsers] = useState([]);
+  const defaultGroup = localStorage.getItem('selectedGroup');
+  const defaultOrder = localStorage.getItem('selectedOrder');
 
-  // Fetch tickets from API
-  useEffect(() => {
-    fetchTickets();
-  }, []);
+  const [group, setGroup] = useState(defaultGroup ? defaultGroup : 'status');
+  const [order, setOrder] = useState(defaultOrder ? defaultOrder : 'priority');
 
-  useEffect(() => {
-    const savedGrouping = localStorage.getItem("grouping");
-    const savedSorting = localStorage.getItem("sorting");
-    if (savedGrouping) setGrouping(savedGrouping);
-    if (savedSorting) setSorting(savedSorting);
-  }, []);
+  const handleGroupChange = (groupSelected) => {
+    setGroup(groupSelected);
+    localStorage.setItem("selectedGroup", groupSelected);
+  }
 
-  const fetchTickets = async () => {
+  
+  const handleOrderChange = (orderSelected) => {
+    setOrder(orderSelected);
+    localStorage.setItem("selectedOrder", orderSelected);
+  }
+
+  const fetchData = async () => {
     try {
-      const response = await fetch(API_URL);
-      const data = await response.json();
-      setTickets(data);
+      const res = await fetch(API_URL);
+      const data = await res.json();
+      setTickets(data.tickets);
+      setUsers(data.users);
     } catch (error) {
-      console.error("Error fetching tickets:", error);
+      console.log("Unable to fetch data! ", error);
     }
-  };
-
-  const handleGroupingChange = (option) => {
-    setGrouping(option);
-    localStorage.setItem("grouping", option);
-  };
-
-  const handleSortingChange = (option) => {
-    setSorting(option);
-    localStorage.setItem("sorting", option);
-  };
-
-  const getGroupedTickets = () => {
-    if (grouping === "status") {
-      return groupBy(tickets, "status");
-    } else if (grouping === "user") {
-      return groupBy(tickets, "assignedUser");
-    } else if (grouping === "priority") {
-      return groupBy(tickets, "priority");
-    }
-    return {};
-  };
-
-  const groupBy = (array, key) => {
-    return array.reduce((result, item) => {
-      (result[item[key]] = result[item[key]] || []).push(item);
-      return result;
-    }, {});
-  };
-
-  const sortedTickets = (group) => {
-    return group.sort((a, b) => {
-      if (sorting === "priority") {
-        return b.priority - a.priority;
-      }
-      if (sorting === "title") {
-        return a.title.localeCompare(b.title);
-      }
-      return 0;
-    });
-  };
-
-  const groupedTickets = getGroupedTickets();
+  }
+  
+  useEffect(() => {
+    fetchData();
+  }, [])
 
   return (
-    <div className="App">
-      <header className="kanban-header">
-        <button
-          onClick={() => handleGroupingChange("status")}
-          className={grouping === "status" ? "active" : ""}
-        >
-          Group by Status
-        </button>
-        <button
-          onClick={() => handleGroupingChange("user")}
-          className={grouping === "user" ? "active" : ""}
-        >
-          Group by User
-        </button>
-        <button
-          onClick={() => handleGroupingChange("priority")}
-          className={grouping === "priority" ? "active" : ""}
-        >
-          Group by Priority
-        </button>
-
-        <button
-          onClick={() => handleSortingChange("priority")}
-          className={sorting === "priority" ? "active" : ""}
-        >
-          Sort by Priority
-        </button>
-        <button
-          onClick={() => handleSortingChange("title")}
-          className={sorting === "title" ? "active" : ""}
-        >
-          Sort by Title
-        </button>
-      </header>
-
-      <div className="kanban-board">
-        {Object.keys(groupedTickets).map((groupKey) => (
-          <div key={groupKey} className="kanban-column">
-            <h3>{groupKey}</h3>
-            <div className="kanban-tickets">
-              {sortedTickets(groupedTickets[groupKey]).map((ticket) => (
-                <div key={ticket.id} className={`ticket priority-${ticket.priority}`}>
-                  <h4>{ticket.title}</h4>
-                  <p>{ticket.description}</p>
-                  <p><strong>User:</strong> {ticket.assignedUser}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
+    <div className="App scroll-container">
+      <Navbar group={group} order={order} onGroupchange={handleGroupChange} onOrderChange={handleOrderChange} />
+      <div className='boards_container'>
+        <div className='app_boards'>
+          {
+            group === 'status' && status.map((opt, id) => (
+              <Board order={order} data={opt} key={id} tickets={tickets} users={users} group={group} />
+            ))
+          }
+          {
+            group === 'user' && users.map((opt) => (
+              <Board order={order} data={opt} key={opt.id} tickets={tickets} users={users} group={group} userId={opt?.id} />
+            ))
+          }
+          {
+            group === 'priority' && priorities.map((opt, id) => (
+              <Board order={order} data={opt} level={id} key={id} tickets={tickets} users={users} group={group} />
+            ))
+          }
+        </div>
       </div>
     </div>
   );
+
 }
+
+// const TicketList = () => {
+//   const [tickets, setTickets] = useState([]);
+//   const [users, setUsers] = useState([]);
+
+//   useEffect(() => {
+//     // Fetch data from the API
+//     const fetchData = async () => {
+//       try {
+//         const response = await fetch(API_URL);
+//         const data = await response.json();
+        
+//         // Set tickets and users data in state
+//         setTickets(data.tickets);
+//         setUsers(data.users);
+//       } catch (error) {
+//         console.error("Error fetching data:", error);
+//       }
+//     };
+
+//     fetchData();
+//   }, []);
+
+//   // Function to get the user name based on userId
+//   const getUserName = (userId) => {
+//     const user = users.find(user => user.id === userId);
+//     return user ? user.name : "Unknown";
+//   };
+
+//   // Function to get user availability based on userId
+//   const getUserAvailability = (userId) => {
+//     const user = users.find(user => user.id === userId);
+//     return user ? (user.available ? "Available" : "Not Available") : "Unknown";
+//   };
+
+//   return (
+//     <div className="ticket-list">
+//       <h1>Ticket Management</h1>
+//       <ul>
+//         {tickets.map(ticket => (
+//           <li key={ticket.id} className="ticket-item">
+//             <div className="ticket-card">
+//               <h2>{ticket.title}</h2>
+//               <p><strong>Tags:</strong> {ticket.tag.join(", ")}</p>
+//               <p><strong>Status:</strong> {ticket.status}</p>
+//               <p><strong>Priority:</strong> {ticket.priority}</p>
+//               <p><strong>Assigned User:</strong> {getUserName(ticket.userId)}</p>
+//               <p><strong>User Availability:</strong> {getUserAvailability(ticket.userId)}</p>
+//             </div>
+//           </li>
+//         ))}
+//       </ul>
+//     </div>
+//   );
+// };
 
 export default App;
