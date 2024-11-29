@@ -9,7 +9,8 @@
 
 @media screen and (max-width:700px) {
     .grid-container {
-        width: 100%;
+        width: 10000vh;
+        overflow: auto;
         min-height: 100vh;
         grid-template-columns: repeat(1, 1fr);
     }

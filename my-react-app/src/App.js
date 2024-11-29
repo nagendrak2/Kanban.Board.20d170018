@@ -69,9 +69,33 @@ function App() {
         setGrouping={onChangeGroup} 
         setOrdering={onChangeOrder}
       />
-      <div>
+      <div style={{backgroundColor: "#f5f7fa", overflowX: 'scroll' }}>
         <Grid gridData={gridData} userData={userData} grouping={grouping}/>
       </div>
+
+      {/* <div 
+      style={{
+        width: '100%',
+        overflowY: 'auto',
+        whiteSpace: 'nowrap',
+        backgroundColor: '#f0f0f0', // Background color for the entire scrollable area
+        padding: '1rem 0' // Optional padding for spacing
+      }}
+    >
+      <div 
+        style={{
+          display: 'inline-block',  // To keep elements in a single row
+          width: '200px', // Fixed width for each "card"
+          backgroundColor: '#fff', // Background color for each individual card
+          marginRight: '1rem', // Optional margin between cards
+          boxSizing: 'border-box', // Ensures padding and border are included in width
+          border: '1px solid #ccc', // Optional border for card separation
+          padding: '1rem' // Padding inside the card
+        }}
+      >
+        <Grid gridData={gridData} userData={userData} grouping={grouping} />
+      </div>
+    </div> */}
     </>
   );
 }

@@ -95,7 +95,9 @@ export default function Card({ ticket, userData, hideStatusIcon, hideProfileIcon
         <div className='title'>{ticket.title}</div>
       </div>
       <div className='bottom-container'>
-        {!hidePriorityIcon && getPriorityIcon(getPriority(ticket.priority))}
+        <div className={`tag-container ${!hidePriorityIcon ? 'with-content' : ''}`}>
+          {!hidePriorityIcon && getPriorityIcon(getPriority(ticket.priority))}
+        </div>
         {ticket.tag.map((t) => (
           <div key={t} className='tag-container'>
             <div className='tag-icon'></div>

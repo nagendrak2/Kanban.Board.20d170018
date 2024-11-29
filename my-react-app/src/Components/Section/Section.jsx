@@ -3,6 +3,8 @@ import { getPriorityIcon, getStatusIcon } from '../../utils/sectionUtils';
 import Profile from '../../ui/Profile/Profile';
 import Card from '../../ui/Card/Card';
 import "./Section.css";
+import { ReactComponent as AddSVG } from "../../assets/add.svg"
+import { ReactComponent as DotMenu } from "../../assets/3 dot menu.svg"
 
 export default function Section({ tickets, grouping, userData, groupBy }) {
     const title = useMemo(() => {
@@ -39,8 +41,8 @@ export default function Section({ tickets, grouping, userData, groupBy }) {
                 </div>
             </div>
             <div className='section-right-container'>
-                <img src='/assets/add.svg' height={20} width={20} alt='add'/>
-                <img src='/assets/3 dot menu.svg' height={20} width={20} alt='menu'/>
+                <AddSVG height={20} width={20} alt='add'/>
+                <DotMenu height={20} width={20} alt='menu'/>
             </div>
         </div>
         <div className="section-body">

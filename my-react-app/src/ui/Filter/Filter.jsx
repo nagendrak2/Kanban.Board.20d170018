@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import './Filter.css'
+import { ReactComponent as DisplaySVG } from "../../assets/Display.svg"
+import { ReactComponent as DownSVG } from "../../assets/down.svg"
 
 export const Filter = ({ grouping,ordering,setGrouping,setOrdering }) => {
 
@@ -30,9 +32,9 @@ export const Filter = ({ grouping,ordering,setGrouping,setOrdering }) => {
   return (
     <div className='display-dropdown' ref={comp}>
       <div className='dropdown-label-container' onClick={onOpenDropDown}>
-        <img src={'/assets/Display.svg'} height={20} width={30} alt='display'/>
+        <DisplaySVG height={20} width={30} alt='display'/>
         <div className='dropdown-label'>Display</div>
-        <img src={'/assets/down.svg'} height={20} width={30} alt='down'/>
+        <DownSVG height={20} width={30} alt='down'/>
       </div>
       <div className={`dropdown-content-container ${open && "visible"}`}>
         <div className='dropdown-content-row'>
